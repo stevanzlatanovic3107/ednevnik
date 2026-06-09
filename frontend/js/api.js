@@ -1,5 +1,5 @@
 // ===== API KONSTANTE =====
-const API_URL = 'http://localhost:3000/api';
+const API_URL = '/api';
 
 // ===== API FUNKCIJE =====
 const API = {
