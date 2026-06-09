@@ -1,5 +1,5 @@
 // ===== NASTAVNIČKI DASHBOARD =====
-const API_URL = 'http://localhost:3000/api';
+const API_URL = '/api';
 let user = null;
 let skolaId = null;
 let nastavnikId = null;
