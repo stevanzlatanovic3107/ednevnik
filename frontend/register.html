@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registracija škole - eDnevnik</title>
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+  <style>
+    .register-wrapper {
+      min-height: 100vh;
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+    }
+    .register-card {
+      background: white;
+      border-radius: 24px;
+      padding: 40px;
+      max-width: 600px;
+      width: 100%;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    }
+    .register-card h1 {
+      font-size: 1.8rem;
+      color: var(--navy);
+      margin-bottom: 8px;
+    }
+    .register-card .subtitle {
+      color: var(--text-muted);
+      margin-bottom: 32px;
+    }
+    .section-title {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--navy);
+      margin: 24px 0 16px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--accent);
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 24px;
+      color: var(--text-muted);
+      text-decoration: none;
+    }
+    .back-link:hover {
+      color: var(--navy);
+    }
+  </style>
+</head>
+<body>
+  <div class="register-wrapper">
+    <div class="register-card">
+      <h1><i class="ti ti-building"></i> Registracija škole</h1>
+      <p class="subtitle">Kreirajte vašu školu u sistemu eDnevnik</p>
+
+      <div id="error" class="alert alert-error" style="display:none; margin-bottom: 20px;"></div>
+      <div id="success" class="alert alert-success" style="display:none; margin-bottom: 20px;"></div>
+
+      <!-- Podaci o školi -->
+      <div class="section-title"><i class="ti ti-school"></i> Podaci o školi</div>
+      <div class="form-group">
+        <label>Naziv škole *</label>
+        <input type="text" id="skolaNaziv" class="input-plain" placeholder="npr. OŠ Branko Radičević">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Mesto *</label>
+          <input type="text" id="skolaMesto" class="input-plain" placeholder="Beograd">
+        </div>
+        <div class="form-group">
+          <label>Adresa</label>
+          <input type="text" id="skolaAdresa" class="input-plain" placeholder="Ulica i broj">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Telefon</label>
+          <input type="tel" id="skolaTelefon" class="input-plain" placeholder="011/123-4567">
+        </div>
+        <div class="form-group">
+          <label>Email *</label>
+          <input type="email" id="skolaEmail" class="input-plain" placeholder="skola@example.com">
+        </div>
+      </div>
+
+      <!-- Podaci o direktoru -->
+      <div class="section-title"><i class="ti ti-user"></i> Podaci o direktoru</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Ime *</label>
+          <input type="text" id="dirIme" class="input-plain" placeholder="Ime">
+        </div>
+        <div class="form-group">
+          <label>Prezime *</label>
+          <input type="text" id="dirPrezime" class="input-plain" placeholder="Prezime">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>JMBG (13 cifara) *</label>
+        <input type="text" id="dirJmbg" class="input-plain" placeholder="1234567890123" maxlength="13">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Korisničko ime *</label>
+          <input type="text" id="dirUsername" class="input-plain" placeholder="direktor">
+        </div>
+        <div class="form-group">
+          <label>Lozinka *</label>
+          <input type="password" id="dirPassword" class="input-plain" placeholder="******">
+        </div>
+      </div>
+
+      <button id="registerBtn" class="btn-primary" style="margin-top: 16px;">
+        <i class="ti ti-check"></i> Registrujte školu
+      </button>
+
+      <a href="index.html" class="back-link">
+        <i class="ti ti-arrow-left"></i> Nazad na početnu
+      </a>
+    </div>
+  </div>
+
+  <script>
+    const API_URL = 'http://localhost:3000/api';
+
+    document.getElementById('registerBtn').addEventListener('click', async () => {
+      const skolaData = {
+        naziv: document.getElementById('skolaNaziv').value,
+        mesto: document.getElementById('skolaMesto').value,
+        adresa: document.getElementById('skolaAdresa').value,
+        telefon: document.getElementById('skolaTelefon').value,
+        email: document.getElementById('skolaEmail').value
+      };
+
+      const direktorData = {
+        ime: document.getElementById('dirIme').value,
+        prezime: document.getElementById('dirPrezime').value,
+        jmbg: document.getElementById('dirJmbg').value,
+        username: document.getElementById('dirUsername').value,
+        password: document.getElementById('dirPassword').value
+      };
+
+      // Validacija
+      if (!skolaData.naziv || !skolaData.mesto || !skolaData.email) {
+        showError('Popunite obavezna polja škole');
+        return;
+      }
+      if (!direktorData.ime || !direktorData.prezime || !direktorData.jmbg || !direktorData.username || !direktorData.password) {
+        showError('Popunite sva polja direktora');
+        return;
+      }
+      if (!/^\d{13}$/.test(direktorData.jmbg)) {
+        showError('JMBG mora imati tačno 13 cifara');
+        return;
+      }
+
+      try {
+        const response = await fetch(`${API_URL}/register`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ skola: skolaData, direktor: direktorData })
+        });
+
+        const result = await response.json();
+        
+        if (response.ok) {
+          showSuccess('Škola je uspešno registrovana! Preusmeravamo vas na prijavu...', true);
+          setTimeout(() => {
+            window.location.href = 'login.html';
+          }, 2000);
+        } else {
+          showError(result.error || 'Greška pri registraciji');
+        }
+      } catch (err) {
+        showError('Greška: Da li je server pokrenut?');
+        console.error(err);
+      }
+    });
+
+    function showError(msg) {
+      const errDiv = document.getElementById('error');
+      errDiv.innerHTML = `<i class="ti ti-alert-circle"></i> ${msg}`;
+      errDiv.style.display = 'flex';
+      setTimeout(() => errDiv.style.display = 'none', 5000);
+    }
+
+    function showSuccess(msg) {
+      const sucDiv = document.getElementById('success');
+      sucDiv.innerHTML = `<i class="ti ti-check"></i> ${msg}`;
+      sucDiv.style.display = 'flex';
+    }
+  </script>
+</body>
+</html>

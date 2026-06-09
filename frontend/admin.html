@@ -1,0 +1,1420 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Administracija škole - eDnevnik</title>
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+</head>
+<body>
+  <div class="app-body">
+    <div class="sidebar">
+      <div class="sidebar-logo">
+        <h2><i class="ti ti-school"></i> eDnevnik</h2>
+        <p>Administracija škole</p>
+      </div>
+      <div class="sidebar-nav">
+        <div class="nav-item active" data-section="nastavnici">
+          <i class="ti ti-users"></i> <span>Nastavnici</span>
+        </div>
+        <div class="nav-item" data-section="predmeti">
+          <i class="ti ti-books"></i> <span>Predmeti</span>
+        </div>
+        <div class="nav-item" data-section="razredi">
+          <i class="ti ti-school"></i> <span>Odeljenja</span>
+        </div>
+        <div class="nav-item" data-section="ucenici">
+          <i class="ti ti-users"></i> <span>Učenici</span>
+        </div>
+        <div class="nav-item" data-section="raspored">
+          <i class="ti ti-calendar"></i> <span>Raspored</span>
+        </div>
+        <div class="nav-item" data-section="roditelji">
+          <i class="ti ti-user-check"></i> <span>Roditelji</span>
+        </div>
+      </div>
+      <div class="sidebar-footer">
+        <div class="user-info">
+          <div class="user-avatar" id="userAvatar">D</div>
+          <div>
+            <div id="userName">Direktor</div>
+            <small id="userRole">Admin</small>
+          </div>
+        </div>
+        <button class="logout-btn" id="logoutBtn">
+          <i class="ti ti-logout"></i> Odjava
+        </button>
+      </div>
+    </div>
+
+    <div class="main-content">
+      <div class="topbar">
+        <h1 id="pageTitle">Nastavnici</h1>
+      </div>
+      <div class="page-content">
+        
+        <!-- Nastavnici Section -->
+        <div id="nastavniciSection" class="page-section">
+          <div class="d-flex justify-between align-center mb-16">
+            <h3>Svi nastavnici</h3>
+            <button class="btn-primary btn-sm" id="dodajNastavnikaBtn">
+              <i class="ti ti-plus"></i> Dodaj nastavnika
+            </button>
+          </div>
+          <div class="table-wrap">
+            <table class="data-table w-100">
+              <thead>
+                <tr><th>Ime</th><th>Prezime</th><th>JMBG</th><th>Predmet</th><th>Email</th><th>Telefon</th><th>Username</th><th>Akcije</th>
+              </thead>
+              <tbody id="nastavniciTable"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Predmeti Section -->
+        <div id="predmetiSection" class="page-section" style="display:none;">
+          <div class="d-flex justify-between align-center mb-16">
+            <h3>Svi predmeti</h3>
+            <button class="btn-primary btn-sm" id="dodajPredmetBtn">
+              <i class="ti ti-plus"></i> Dodaj predmet
+            </button>
+          </div>
+          <div class="table-wrap">
+            <table class="data-table w-100">
+              <thead><tr><th>Naziv</th><th>Opis</th><th>Akcije</th></thead>
+              <tbody id="predmetiTable"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Razredi Section -->
+        <div id="razrediSection" class="page-section" style="display:none;">
+          <div class="d-flex justify-between align-center mb-16">
+            <h3>Sva odeljenja</h3>
+            <button class="btn-primary btn-sm" id="dodajRazredBtn">
+              <i class="ti ti-plus"></i> Dodaj odeljenje
+            </button>
+          </div>
+          <div class="table-wrap">
+            <table class="data-table w-100">
+              <thead><tr><th>Naziv</th><th>Razredni starešina</th><th>Godina</th><th>Akcije</th></thead>
+              <tbody id="razrediTable"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Učenici Section -->
+        <div id="uceniciSection" class="page-section" style="display:none;">
+          <div class="d-flex justify-between align-center mb-16">
+            <h3>Svi učenici</h3>
+            <button class="btn-primary btn-sm" id="dodajUcenikaBtn">
+              <i class="ti ti-plus"></i> Dodaj učenika
+            </button>
+          </div>
+          <div class="table-wrap">
+            <table class="data-table w-100">
+              <thead><tr><th>Ime</th><th>Prezime</th><th>JMBG</th><th>Datum rođenja</th><th>Odeljenje</th><th>Akcije</th></thead>
+              <tbody id="uceniciTable"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Raspored Section -->
+        <div id="rasporedSection" class="page-section" style="display:none;">
+          <div class="d-flex justify-between align-center mb-16">
+            <h3>Dodela predmeta odeljenjima</h3>
+            <button class="btn-primary btn-sm" id="dodajRasporedBtn">
+              <i class="ti ti-plus"></i> Dodaj predmet odeljenju
+            </button>
+          </div>
+          <div class="table-wrap">
+            <table class="data-table w-100">
+              <thead><tr><th>Odeljenje</th><th>Predmet</th><th>Nastavnik</th><th>Akcije</th></thead>
+              <tbody id="rasporedTable"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Roditelji Section -->
+        <div id="roditeljiSection" class="page-section" style="display:none;">
+          <div class="d-flex justify-between align-center mb-16">
+            <h3>Svi roditelji</h3>
+            <button class="btn-primary btn-sm" id="dodajRoditeljaBtn">
+              <i class="ti ti-plus"></i> Dodaj roditelja
+            </button>
+          </div>
+          <div class="table-wrap">
+            <table class="data-table w-100">
+              <thead><tr><th>Ime</th><th>Prezime</th><th>JMBG</th><th>Username</th><th>Dete</th><th>Email</th><th>Akcije</th></thead>
+              <tbody id="roditeljiTable"></tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal za nastavnika -->
+  <div id="nastavnikModal" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h3><i class="ti ti-user-plus"></i> Dodaj nastavnika</h3>
+        <button class="close-modal" data-modal="nastavnikModal">&times;</button>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Ime *</label>
+          <input type="text" id="nastavnikIme" class="input-plain">
+        </div>
+        <div class="form-group">
+          <label>Prezime *</label>
+          <input type="text" id="nastavnikPrezime" class="input-plain">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>JMBG (13 cifara) *</label>
+        <input type="text" id="nastavnikJmbg" class="input-plain" maxlength="13" placeholder="1234567890123">
+      </div>
+      <div class="form-group">
+        <label>Predmet koji predaje *</label>
+        <select id="nastavnikPredmet" class="input-plain">
+          <option value="">Izaberite predmet</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="nastavnikEmail" class="input-plain">
+        </div>
+        <div class="form-group">
+          <label>Telefon</label>
+          <input type="text" id="nastavnikTelefon" class="input-plain">
+        </div>
+      </div>
+      <div class="form-row" style="background: var(--accent-soft); padding: 12px; border-radius: var(--radius-md); margin-bottom: 12px;">
+        <div class="form-group" style="margin-bottom: 0;">
+          <label style="color: var(--navy);">Korisničko ime *</label>
+          <input type="text" id="nastavnikUsername" class="input-plain" placeholder="nastavnik1">
+        </div>
+        <div class="form-group" style="margin-bottom: 0;">
+          <label style="color: var(--navy);">Lozinka *</label>
+          <input type="password" id="nastavnikPassword" class="input-plain" placeholder="******">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary close-modal" data-modal="nastavnikModal">Odustani</button>
+        <button class="btn-primary" id="saveNastavnikBtn">Sačuvaj nastavnika</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal za predmet -->
+  <div id="predmetModal" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Dodaj predmet</h3>
+        <button class="close-modal" data-modal="predmetModal">&times;</button>
+      </div>
+      <div class="form-group">
+        <label>Naziv predmeta *</label>
+        <input type="text" id="predmetNaziv" class="input-plain">
+      </div>
+      <div class="form-group">
+        <label>Opis</label>
+        <textarea id="predmetOpis" class="input-plain" rows="3"></textarea>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary close-modal" data-modal="predmetModal">Odustani</button>
+        <button class="btn-primary" id="savePredmetBtn">Sačuvaj</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal za razred -->
+  <div id="razredModal" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Dodaj odeljenje</h3>
+        <button class="close-modal" data-modal="razredModal">&times;</button>
+      </div>
+      <div class="form-group">
+        <label>Naziv odeljenja *</label>
+        <input type="text" id="razredNaziv" class="input-plain" placeholder="5a, 5b, 6a...">
+      </div>
+      <div class="form-group">
+        <label>Razredni starešina</label>
+        <select id="razredStaresina" class="input-plain">
+          <option value="">Izaberite nastavnika</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Školska godina</label>
+        <input type="text" id="razredGodina" class="input-plain" value="2024/25">
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary close-modal" data-modal="razredModal">Odustani</button>
+        <button class="btn-primary" id="saveRazredBtn">Sačuvaj</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal za učenika sa roditeljem -->
+  <div id="ucenikModal" class="modal-overlay">
+    <div class="modal" style="max-width: 700px;">
+      <div class="modal-header">
+        <h3><i class="ti ti-user-plus"></i> Dodaj učenika i roditelja</h3>
+        <button class="close-modal" data-modal="ucenikModal">&times;</button>
+      </div>
+      
+      <div style="background: var(--navy); color: white; padding: 10px; border-radius: var(--radius-md); margin-bottom: 16px;">
+        <i class="ti ti-school"></i> Podaci o učeniku
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Ime učenika *</label>
+          <input type="text" id="ucenikIme" class="input-plain">
+        </div>
+        <div class="form-group">
+          <label>Prezime učenika *</label>
+          <input type="text" id="ucenikPrezime" class="input-plain">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>JMBG (13 cifara) *</label>
+          <input type="text" id="ucenikJmbg" class="input-plain" maxlength="13" placeholder="1234567890123">
+        </div>
+        <div class="form-group">
+          <label>Datum rođenja</label>
+          <input type="date" id="ucenikDatum" class="input-plain">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Odeljenje *</label>
+        <select id="ucenikRazred" class="input-plain">
+          <option value="">Izaberite odeljenje</option>
+        </select>
+      </div>
+
+      <div style="background: var(--accent); color: var(--navy); padding: 10px; border-radius: var(--radius-md); margin: 16px 0 16px 0;">
+        <i class="ti ti-user-check"></i> Podaci o roditelju (biće kreiran nalog za prijavu)
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Ime roditelja *</label>
+          <input type="text" id="roditeljImeUcenik" class="input-plain">
+        </div>
+        <div class="form-group">
+          <label>Prezime roditelja *</label>
+          <input type="text" id="roditeljPrezimeUcenik" class="input-plain">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>JMBG roditelja (13 cifara) *</label>
+          <input type="text" id="roditeljJmbgUcenik" class="input-plain" maxlength="13" placeholder="1234567890123">
+        </div>
+        <div class="form-group">
+          <label>Email roditelja</label>
+          <input type="email" id="roditeljEmailUcenik" class="input-plain" placeholder="roditelj@example.com">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Korisničko ime roditelja *</label>
+          <input type="text" id="roditeljUsernameUcenik" class="input-plain" placeholder="roditelj1">
+        </div>
+        <div class="form-group">
+          <label>Lozinka roditelja *</label>
+          <input type="password" id="roditeljPasswordUcenik" class="input-plain" placeholder="******">
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-secondary close-modal" data-modal="ucenikModal">Odustani</button>
+        <button class="btn-primary" id="saveUcenikBtn">Sačuvaj učenika i roditelja</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal za raspored -->
+  <div id="rasporedModal" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Dodeli predmet odeljenju</h3>
+        <button class="close-modal" data-modal="rasporedModal">&times;</button>
+      </div>
+      <div class="form-group">
+        <label>Odeljenje</label>
+        <select id="rasporedRazred" class="input-plain"></select>
+      </div>
+      <div class="form-group">
+        <label>Predmet</label>
+        <select id="rasporedPredmet" class="input-plain"></select>
+      </div>
+      <div class="form-group">
+        <label>Nastavnik koji predaje</label>
+        <select id="rasporedNastavnik" class="input-plain"></select>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary close-modal" data-modal="rasporedModal">Odustani</button>
+        <button class="btn-primary" id="saveRasporedBtn">Sačuvaj</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal za roditelja -->
+  <div id="roditeljModal" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Dodaj roditelja</h3>
+        <button class="close-modal" data-modal="roditeljModal">&times;</button>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Ime *</label>
+          <input type="text" id="roditeljIme" class="input-plain">
+        </div>
+        <div class="form-group">
+          <label>Prezime *</label>
+          <input type="text" id="roditeljPrezime" class="input-plain">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>JMBG (13 cifara) *</label>
+        <input type="text" id="roditeljJmbg" class="input-plain" maxlength="13">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Korisničko ime *</label>
+          <input type="text" id="roditeljUsername" class="input-plain">
+        </div>
+        <div class="form-group">
+          <label>Lozinka *</label>
+          <input type="password" id="roditeljPassword" class="input-plain">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" id="roditeljEmail" class="input-plain">
+      </div>
+      <div class="form-group">
+        <label>Telefon</label>
+        <input type="text" id="roditeljTelefon" class="input-plain">
+      </div>
+      <div class="form-group">
+        <label>Poveži sa detetom</label>
+        <select id="roditeljDete" class="input-plain">
+          <option value="">Izaberite dete</option>
+        </select>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary close-modal" data-modal="roditeljModal">Odustani</button>
+        <button class="btn-primary" id="saveRoditeljBtn">Sačuvaj</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal za editovanje nastavnika -->
+  <div id="editNastavnikModal" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h3><i class="ti ti-edit"></i> Izmeni nastavnika</h3>
+        <button class="close-modal" data-modal="editNastavnikModal">&times;</button>
+      </div>
+      <input type="hidden" id="editNastavnikId">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Ime</label>
+          <input type="text" id="editNastavnikIme" class="input-plain">
+        </div>
+        <div class="form-group">
+          <label>Prezime</label>
+          <input type="text" id="editNastavnikPrezime" class="input-plain">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>JMBG</label>
+        <input type="text" id="editNastavnikJmbg" class="input-plain" maxlength="13">
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" id="editNastavnikEmail" class="input-plain">
+      </div>
+      <div class="form-group">
+        <label>Telefon</label>
+        <input type="text" id="editNastavnikTelefon" class="input-plain">
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary close-modal" data-modal="editNastavnikModal">Odustani</button>
+        <button class="btn-primary" id="updateNastavnikBtn">Sačuvaj izmene</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal za editovanje učenika -->
+  <div id="editUcenikModal" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h3><i class="ti ti-edit"></i> Izmeni učenika</h3>
+        <button class="close-modal" data-modal="editUcenikModal">&times;</button>
+      </div>
+      <input type="hidden" id="editUcenikId">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Ime</label>
+          <input type="text" id="editUcenikIme" class="input-plain">
+        </div>
+        <div class="form-group">
+          <label>Prezime</label>
+          <input type="text" id="editUcenikPrezime" class="input-plain">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>JMBG</label>
+        <input type="text" id="editUcenikJmbg" class="input-plain" maxlength="13">
+      </div>
+      <div class="form-group">
+        <label>Datum rođenja</label>
+        <input type="date" id="editUcenikDatum" class="input-plain">
+      </div>
+      <div class="form-group">
+        <label>Odeljenje</label>
+        <select id="editUcenikRazred" class="input-plain"></select>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary close-modal" data-modal="editUcenikModal">Odustani</button>
+        <button class="btn-primary" id="updateUcenikBtn">Sačuvaj izmene</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal za editovanje odeljenja -->
+  <div id="editRazredModal" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h3><i class="ti ti-edit"></i> Izmeni odeljenje</h3>
+        <button class="close-modal" data-modal="editRazredModal">&times;</button>
+      </div>
+      <input type="hidden" id="editRazredId">
+      <div class="form-group">
+        <label>Naziv odeljenja</label>
+        <input type="text" id="editRazredNaziv" class="input-plain">
+      </div>
+      <div class="form-group">
+        <label>Razredni starešina</label>
+        <select id="editRazredStaresina" class="input-plain"></select>
+      </div>
+      <div class="form-group">
+        <label>Školska godina</label>
+        <input type="text" id="editRazredGodina" class="input-plain">
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary close-modal" data-modal="editRazredModal">Odustani</button>
+        <button class="btn-primary" id="updateRazredBtn">Sačuvaj izmene</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API_URL = 'http://localhost:3000/api';
+    let skolaId = null;
+    let nastavniciLista = [];
+    let predmetiLista = [];
+    let razrediLista = [];
+    let uceniciLista = [];
+
+    // ===== INICIJALIZACIJA =====
+    document.addEventListener('DOMContentLoaded', async () => {
+      const user = localStorage.getItem('user');
+      if (!user) {
+        window.location.href = 'login.html';
+        return;
+      }
+      const userData = JSON.parse(user);
+      skolaId = userData.skolaId;
+      
+      document.getElementById('userName').innerText = `${userData.ime} ${userData.prezime}`;
+      document.getElementById('userAvatar').innerText = (userData.ime[0] + userData.prezime[0]).toUpperCase();
+      
+      // Event listeneri za navigaciju
+      document.querySelectorAll('.nav-item').forEach(item => {
+        item.addEventListener('click', () => {
+          const section = item.getAttribute('data-section');
+          showSection(section);
+        });
+      });
+      
+      // Logout
+      document.getElementById('logoutBtn').addEventListener('click', logout);
+      
+      // Event listeneri za dugmad za dodavanje
+      document.getElementById('dodajNastavnikaBtn').addEventListener('click', () => openModal('nastavnikModal'));
+      document.getElementById('dodajPredmetBtn').addEventListener('click', () => openModal('predmetModal'));
+      document.getElementById('dodajRazredBtn').addEventListener('click', () => openModal('razredModal'));
+      document.getElementById('dodajUcenikaBtn').addEventListener('click', () => openModal('ucenikModal'));
+      document.getElementById('dodajRasporedBtn').addEventListener('click', () => openModal('rasporedModal'));
+      document.getElementById('dodajRoditeljaBtn').addEventListener('click', () => openModal('roditeljModal'));
+      
+      // Event listeneri za save dugmad
+      document.getElementById('saveNastavnikBtn').addEventListener('click', saveNastavnik);
+      document.getElementById('savePredmetBtn').addEventListener('click', savePredmet);
+      document.getElementById('saveRazredBtn').addEventListener('click', saveRazred);
+      document.getElementById('saveUcenikBtn').addEventListener('click', saveUcenikSaRoditeljem);
+      document.getElementById('saveRasporedBtn').addEventListener('click', saveRaspored);
+      document.getElementById('saveRoditeljBtn').addEventListener('click', saveRoditelj);
+      
+      // Event listeneri za update dugmad
+      document.getElementById('updateNastavnikBtn').addEventListener('click', updateNastavnik);
+      document.getElementById('updateUcenikBtn').addEventListener('click', updateUcenik);
+      document.getElementById('updateRazredBtn').addEventListener('click', updateRazred);
+      
+      // Event listeneri za zatvaranje modala
+      document.querySelectorAll('.close-modal').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const modalId = btn.getAttribute('data-modal');
+          closeModal(modalId);
+        });
+      });
+      
+      // Učitaj podatke
+      await loadNastavnici();
+      await loadPredmeti();
+      await loadRazredi();
+      await loadUcenici();
+      await loadRaspored();
+      await loadRoditelji();
+      await loadPredmetiSelect();
+    });
+
+    // ===== PRIKAZ SEKCIJA =====
+    function showSection(section) {
+      document.querySelectorAll('.page-section').forEach(s => s.style.display = 'none');
+      document.getElementById(`${section}Section`).style.display = 'block';
+      
+      const titles = {
+        nastavnici: 'Nastavnici',
+        predmeti: 'Predmeti',
+        razredi: 'Odeljenja',
+        ucenici: 'Učenici',
+        raspored: 'Raspored',
+        roditelji: 'Roditelji'
+      };
+      document.getElementById('pageTitle').innerText = titles[section];
+      
+      document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+      document.querySelector(`.nav-item[data-section="${section}"]`).classList.add('active');
+    }
+
+    function logout() {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      window.location.href = 'index.html';
+    }
+
+    function openModal(modalId) {
+      document.getElementById(modalId).classList.add('open');
+      if (modalId === 'razredModal') loadStaresineSelect();
+      if (modalId === 'ucenikModal') loadRazrediSelect();
+      if (modalId === 'rasporedModal') loadRasporedSelects();
+      if (modalId === 'roditeljModal') loadRoditeljSelects();
+      if (modalId === 'editRazredModal') loadEditStaresineSelect();
+    }
+
+    function closeModal(modalId) {
+      document.getElementById(modalId).classList.remove('open');
+    }
+
+    // ===== PREDMETI SELECT =====
+    async function loadPredmetiSelect() {
+      const select = document.getElementById('nastavnikPredmet');
+      select.innerHTML = '<option value="">Izaberite predmet</option>' + 
+        predmetiLista.map(p => `<option value="${p.id}">${p.naziv}</option>`).join('');
+    }
+
+    // ===== NASTAVNICI =====
+    async function loadNastavnici() {
+      try {
+        const res = await fetch(`${API_URL}/nastavnici/${skolaId}`);
+        nastavniciLista = await res.json();
+        
+        const resKorisnici = await fetch(`${API_URL}/korisnici/${skolaId}/nastavnici`);
+        const korisnici = await resKorisnici.json();
+        
+        const tbody = document.getElementById('nastavniciTable');
+        if (!nastavniciLista.length) {
+          tbody.innerHTML = '<tr><td colspan="8" class="text-center">Nema nastavnika</td></tr>';
+          return;
+        }
+        
+        tbody.innerHTML = nastavniciLista.map(n => {
+          const korisnik = korisnici.find(k => k.nastavnikId == n.id);
+          const predmet = predmetiLista.find(p => p.id == n.predmetId);
+          return `
+            <tr>
+              <td>${n.ime}</td>
+              <td>${n.prezime}</td>
+              <td>${n.jmbg}</td>
+              <td>${predmet ? predmet.naziv : '-'}</td>
+              <td>${n.email || '-'}</td>
+              <td>${n.telefon || '-'}</td>
+              <td><span class="badge badge-blue" style="cursor:pointer" onclick="showNastavnikKorisnik('${n.id}')">${korisnik ? korisnik.username : '-'}</span></td>
+              <td>
+                <button class="btn-secondary btn-sm" onclick="editNastavnik('${n.id}')"><i class="ti ti-edit"></i></button>
+                <button class="btn-danger btn-sm" onclick="deleteNastavnik('${n.id}')"><i class="ti ti-trash"></i></button>
+                <button class="btn-secondary btn-sm" onclick="changePasswordNastavnik('${n.id}')"><i class="ti ti-key"></i></button>
+              </td>
+            </tr>
+          `;
+        }).join('');
+      } catch(err) {
+        showToast('Greška pri učitavanju nastavnika', 'error');
+      }
+    }
+
+    async function saveNastavnik() {
+      const data = {
+        skolaId,
+        ime: document.getElementById('nastavnikIme').value,
+        prezime: document.getElementById('nastavnikPrezime').value,
+        jmbg: document.getElementById('nastavnikJmbg').value,
+        email: document.getElementById('nastavnikEmail').value,
+        telefon: document.getElementById('nastavnikTelefon').value,
+        username: document.getElementById('nastavnikUsername').value,
+        password: document.getElementById('nastavnikPassword').value,
+        predmetId: document.getElementById('nastavnikPredmet').value || null
+      };
+      
+      if (!data.ime || !data.prezime || !data.jmbg || !data.username || !data.password) {
+        showToast('Popunite sva obavezna polja', 'error');
+        return;
+      }
+      if (!/^\d{13}$/.test(data.jmbg)) {
+        showToast('JMBG mora imati 13 cifara', 'error');
+        return;
+      }
+      
+      try {
+        const res = await fetch(`${API_URL}/nastavnici`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+        const result = await res.json();
+        if (result.id) {
+          closeModal('nastavnikModal');
+          document.getElementById('nastavnikIme').value = '';
+          document.getElementById('nastavnikPrezime').value = '';
+          document.getElementById('nastavnikJmbg').value = '';
+          document.getElementById('nastavnikEmail').value = '';
+          document.getElementById('nastavnikTelefon').value = '';
+          document.getElementById('nastavnikUsername').value = '';
+          document.getElementById('nastavnikPassword').value = '';
+          document.getElementById('nastavnikPredmet').value = '';
+          await loadNastavnici();
+          showToast('Nastavnik dodat i nalog kreiran', 'success');
+        } else {
+          showToast(result.error || 'Greška', 'error');
+        }
+      } catch(err) {
+                showToast('Greška pri dodavanju', 'error');
+      }
+    }
+
+    async function showNastavnikKorisnik(nastavnikId) {
+      try {
+        const res = await fetch(`${API_URL}/korisnik/nastavnik/${nastavnikId}`);
+        const korisnik = await res.json();
+        if (korisnik.id) {
+          showToast(`Username: ${korisnik.username}`, 'info');
+        } else {
+          showToast('Nastavnik nema kreiran korisnički nalog', 'warning');
+        }
+      } catch(err) {
+        showToast('Greška', 'error');
+      }
+    }
+
+    async function editNastavnik(id) {
+      const nastavnik = nastavniciLista.find(n => n.id == id);
+      if (!nastavnik) return;
+      
+      document.getElementById('editNastavnikId').value = nastavnik.id;
+      document.getElementById('editNastavnikIme').value = nastavnik.ime;
+      document.getElementById('editNastavnikPrezime').value = nastavnik.prezime;
+      document.getElementById('editNastavnikJmbg').value = nastavnik.jmbg;
+      document.getElementById('editNastavnikEmail').value = nastavnik.email || '';
+      document.getElementById('editNastavnikTelefon').value = nastavnik.telefon || '';
+      
+      openModal('editNastavnikModal');
+    }
+
+    async function updateNastavnik() {
+      const id = document.getElementById('editNastavnikId').value;
+      const data = {
+        ime: document.getElementById('editNastavnikIme').value,
+        prezime: document.getElementById('editNastavnikPrezime').value,
+        jmbg: document.getElementById('editNastavnikJmbg').value,
+        email: document.getElementById('editNastavnikEmail').value,
+        telefon: document.getElementById('editNastavnikTelefon').value
+      };
+      
+      try {
+        const res = await fetch(`${API_URL}/nastavnici/${id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+        if (res.ok) {
+          closeModal('editNastavnikModal');
+          await loadNastavnici();
+          showToast('Nastavnik izmenjen', 'success');
+        } else {
+          const err = await res.json();
+          showToast(err.error || 'Greška', 'error');
+        }
+      } catch(err) {
+        showToast('Greška pri izmeni', 'error');
+      }
+    }
+
+    async function deleteNastavnik(id) {
+      if (!confirm('Da li ste sigurni da želite da obrišete ovog nastavnika?')) return;
+      try {
+        const res = await fetch(`${API_URL}/nastavnici/${id}`, { method: 'DELETE' });
+        if (res.ok) {
+          await loadNastavnici();
+          showToast('Nastavnik obrisan', 'success');
+        }
+      } catch(err) {
+        showToast('Greška', 'error');
+      }
+    }
+
+    async function changePasswordNastavnik(id) {
+      const novaLozinka = prompt('Unesite novu lozinku za nastavnika (min 4 karaktera):');
+      if (!novaLozinka || novaLozinka.length < 4) {
+        showToast('Lozinka mora imati najmanje 4 karaktera', 'error');
+        return;
+      }
+      
+      try {
+        const res = await fetch(`${API_URL}/korisnik/nastavnik/${id}`);
+        const korisnik = await res.json();
+        if (korisnik.id) {
+          const res2 = await fetch(`${API_URL}/korisnici/${korisnik.id}/password`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ password: novaLozinka })
+          });
+          if (res2.ok) {
+            showToast('Lozinka promenjena', 'success');
+          }
+        } else {
+          showToast('Korisnik nije pronađen', 'error');
+        }
+      } catch(err) {
+        showToast('Greška', 'error');
+      }
+    }
+
+    // ===== PREDMETI =====
+    async function loadPredmeti() {
+      try {
+        const res = await fetch(`${API_URL}/predmeti/${skolaId}`);
+        predmetiLista = await res.json();
+        const tbody = document.getElementById('predmetiTable');
+        if (!predmetiLista.length) {
+          tbody.innerHTML = '<tr><td colspan="3" class="text-center">Nema predmeta</td></tr>';
+          return;
+        }
+        tbody.innerHTML = predmetiLista.map(p => `
+          <tr>
+            <td>${p.naziv}</td>
+            <td>${p.opis || '-'}</td>
+            <td>
+              <button class="btn-danger btn-sm" onclick="deletePredmet('${p.id}')"><i class="ti ti-trash"></i></button>
+            </td>
+          </tr>
+        `).join('');
+      } catch(err) {
+        showToast('Greška pri učitavanju predmeta', 'error');
+      }
+    }
+
+    async function savePredmet() {
+      const data = {
+        skolaId,
+        naziv: document.getElementById('predmetNaziv').value,
+        opis: document.getElementById('predmetOpis').value
+      };
+      if (!data.naziv) {
+        showToast('Unesite naziv predmeta', 'error');
+        return;
+      }
+      try {
+        const res = await fetch(`${API_URL}/predmeti`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+        const result = await res.json();
+        if (result.id) {
+          closeModal('predmetModal');
+          document.getElementById('predmetNaziv').value = '';
+          document.getElementById('predmetOpis').value = '';
+          await loadPredmeti();
+          await loadPredmetiSelect();
+          showToast('Predmet dodat', 'success');
+        } else {
+          showToast(result.error || 'Greška', 'error');
+        }
+      } catch(err) {
+        showToast('Greška pri dodavanju', 'error');
+      }
+    }
+
+    async function deletePredmet(id) {
+      if (!confirm('Da li ste sigurni da želite da obrišete ovaj predmet?')) return;
+      try {
+        const res = await fetch(`${API_URL}/predmeti/${id}`, { method: 'DELETE' });
+        if (res.ok) {
+          await loadPredmeti();
+          await loadPredmetiSelect();
+          showToast('Predmet obrisan', 'success');
+        }
+      } catch(err) {
+        showToast('Greška', 'error');
+      }
+    }
+
+    // ===== RAZREDI =====
+    async function loadRazredi() {
+      try {
+        const res = await fetch(`${API_URL}/razredi/${skolaId}`);
+        razrediLista = await res.json();
+        const tbody = document.getElementById('razrediTable');
+        if (!razrediLista.length) {
+          tbody.innerHTML = '<tr><td colspan="4" class="text-center">Nema odeljenja</td></tr>';
+          return;
+        }
+        tbody.innerHTML = razrediLista.map(r => `
+          <tr>
+            <td>${r.naziv}</td>
+            <td>${r.staresinaIme || '-'} ${r.staresinaPrezime || ''}</td>
+            <td>${r.skolskaGodina || '2024/25'}</td>
+            <td>
+              <button class="btn-secondary btn-sm" onclick="editRazred('${r.id}')"><i class="ti ti-edit"></i></button>
+              <button class="btn-danger btn-sm" onclick="deleteRazred('${r.id}')"><i class="ti ti-trash"></i></button>
+            </td>
+          </tr>
+        `).join('');
+      } catch(err) {
+        showToast('Greška pri učitavanju odeljenja', 'error');
+      }
+    }
+
+    async function loadStaresineSelect() {
+      const select = document.getElementById('razredStaresina');
+      select.innerHTML = '<option value="">Izaberite nastavnika</option>' + 
+        nastavniciLista.map(n => `<option value="${n.id}">${n.ime} ${n.prezime}</option>`).join('');
+    }
+
+    async function loadEditStaresineSelect() {
+      const select = document.getElementById('editRazredStaresina');
+      select.innerHTML = '<option value="">Izaberite nastavnika</option>' + 
+        nastavniciLista.map(n => `<option value="${n.id}">${n.ime} ${n.prezime}</option>`).join('');
+    }
+
+    async function saveRazred() {
+      const data = {
+        skolaId,
+        naziv: document.getElementById('razredNaziv').value,
+        razredniStaresinaId: document.getElementById('razredStaresina').value || null,
+        skolskaGodina: document.getElementById('razredGodina').value
+      };
+      if (!data.naziv) {
+        showToast('Unesite naziv odeljenja', 'error');
+        return;
+      }
+      try {
+        const res = await fetch(`${API_URL}/razredi`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+        const result = await res.json();
+        if (result.id) {
+          closeModal('razredModal');
+          document.getElementById('razredNaziv').value = '';
+          await loadRazredi();
+          showToast('Odeljenje dodato', 'success');
+        } else {
+          showToast(result.error || 'Greška', 'error');
+        }
+      } catch(err) {
+        showToast('Greška pri dodavanju', 'error');
+      }
+    }
+
+    async function editRazred(id) {
+      const razred = razrediLista.find(r => r.id == id);
+      if (!razred) return;
+      
+      document.getElementById('editRazredId').value = razred.id;
+      document.getElementById('editRazredNaziv').value = razred.naziv;
+      document.getElementById('editRazredGodina').value = razred.skolskaGodina || '2024/25';
+      
+      const select = document.getElementById('editRazredStaresina');
+      select.innerHTML = '<option value="">Izaberite nastavnika</option>' + 
+        nastavniciLista.map(n => `<option value="${n.id}" ${razred.razredniStaresinaId == n.id ? 'selected' : ''}>${n.ime} ${n.prezime}</option>`).join('');
+      
+      openModal('editRazredModal');
+    }
+
+    async function updateRazred() {
+      const id = document.getElementById('editRazredId').value;
+      const data = {
+        naziv: document.getElementById('editRazredNaziv').value,
+        razredniStaresinaId: document.getElementById('editRazredStaresina').value || null,
+        skolskaGodina: document.getElementById('editRazredGodina').value
+      };
+      
+      try {
+        const res = await fetch(`${API_URL}/razredi/${id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+        if (res.ok) {
+          closeModal('editRazredModal');
+          await loadRazredi();
+          showToast('Odeljenje izmenjeno', 'success');
+        } else {
+          const err = await res.json();
+          showToast(err.error || 'Greška', 'error');
+        }
+      } catch(err) {
+        showToast('Greška pri izmeni', 'error');
+      }
+    }
+
+    async function deleteRazred(id) {
+      if (!confirm('Da li ste sigurni da želite da obrišete ovo odeljenje?')) return;
+      try {
+        const res = await fetch(`${API_URL}/razredi/${id}`, { method: 'DELETE' });
+        if (res.ok) {
+          await loadRazredi();
+          await loadUcenici();
+          showToast('Odeljenje obrisano', 'success');
+        }
+      } catch(err) {
+        showToast('Greška', 'error');
+      }
+    }
+
+    // ===== UČENICI =====
+    async function loadUcenici() {
+      try {
+        const res = await fetch(`${API_URL}/ucenici/${skolaId}`);
+        uceniciLista = await res.json();
+        const tbody = document.getElementById('uceniciTable');
+        if (!uceniciLista.length) {
+          tbody.innerHTML = '<tr><td colspan="6" class="text-center">Nema učenika</td></tr>';
+          return;
+        }
+        tbody.innerHTML = uceniciLista.map(u => {
+          const razred = razrediLista.find(r => r.id == u.razredId);
+          return `
+            <tr>
+              <td>${u.ime}</td>
+              <td>${u.prezime}</td>
+              <td>${u.jmbg}</td>
+              <td>${u.datumRodjenja || '-'}</td>
+              <td>${razred ? razred.naziv : '-'}</td>
+              <td>
+                <button class="btn-secondary btn-sm" onclick="editUcenik('${u.id}')"><i class="ti ti-edit"></i></button>
+                <button class="btn-danger btn-sm" onclick="deleteUcenik('${u.id}')"><i class="ti ti-trash"></i></button>
+              </td>
+            </tr>
+          `;
+        }).join('');
+      } catch(err) {
+        showToast('Greška pri učitavanju učenika', 'error');
+      }
+    }
+
+    async function loadRazrediSelect() {
+      const select = document.getElementById('ucenikRazred');
+      select.innerHTML = '<option value="">Izaberite odeljenje</option>' + 
+        razrediLista.map(r => `<option value="${r.id}">${r.naziv}</option>`).join('');
+      
+      const editSelect = document.getElementById('editUcenikRazred');
+      editSelect.innerHTML = '<option value="">Izaberite odeljenje</option>' + 
+        razrediLista.map(r => `<option value="${r.id}">${r.naziv}</option>`).join('');
+    }
+
+    async function saveUcenikSaRoditeljem() {
+      const ucenikData = {
+        skolaId: skolaId,
+        ime: document.getElementById('ucenikIme').value,
+        prezime: document.getElementById('ucenikPrezime').value,
+        jmbg: document.getElementById('ucenikJmbg').value,
+        datumRodjenja: document.getElementById('ucenikDatum').value,
+        razredId: document.getElementById('ucenikRazred').value || null
+      };
+      
+      const roditeljData = {
+        skolaId: skolaId,
+        ime: document.getElementById('roditeljImeUcenik').value,
+        prezime: document.getElementById('roditeljPrezimeUcenik').value,
+        jmbg: document.getElementById('roditeljJmbgUcenik').value,
+        email: document.getElementById('roditeljEmailUcenik').value,
+        username: document.getElementById('roditeljUsernameUcenik').value,
+        password: document.getElementById('roditeljPasswordUcenik').value
+      };
+      
+      if (!ucenikData.ime || !ucenikData.prezime || !ucenikData.jmbg || !ucenikData.razredId) {
+        showToast('Popunite sva obavezna polja za učenika', 'error');
+        return;
+      }
+      if (!/^\d{13}$/.test(ucenikData.jmbg)) {
+        showToast('JMBG učenika mora imati 13 cifara', 'error');
+        return;
+      }
+      if (!roditeljData.ime || !roditeljData.prezime || !roditeljData.jmbg || !roditeljData.username || !roditeljData.password) {
+        showToast('Popunite sva obavezna polja za roditelja', 'error');
+        return;
+      }
+      if (!/^\d{13}$/.test(roditeljData.jmbg)) {
+        showToast('JMBG roditelja mora imati 13 cifara', 'error');
+        return;
+      }
+      
+      try {
+        const resUcenik = await fetch(`${API_URL}/ucenici`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(ucenikData)
+        });
+        const ucenikResult = await resUcenik.json();
+        
+        if (!ucenikResult.id) {
+          showToast(ucenikResult.error || 'Greška pri dodavanju učenika', 'error');
+          return;
+        }
+        
+        roditeljData.deteId = ucenikResult.id;
+        
+        const resRoditelj = await fetch(`${API_URL}/roditelji`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(roditeljData)
+        });
+        const roditeljResult = await resRoditelj.json();
+        
+        if (roditeljResult.id) {
+          closeModal('ucenikModal');
+          document.getElementById('ucenikIme').value = '';
+          document.getElementById('ucenikPrezime').value = '';
+          document.getElementById('ucenikJmbg').value = '';
+          document.getElementById('ucenikDatum').value = '';
+          document.getElementById('ucenikRazred').value = '';
+          document.getElementById('roditeljImeUcenik').value = '';
+          document.getElementById('roditeljPrezimeUcenik').value = '';
+          document.getElementById('roditeljJmbgUcenik').value = '';
+          document.getElementById('roditeljEmailUcenik').value = '';
+          document.getElementById('roditeljUsernameUcenik').value = '';
+          document.getElementById('roditeljPasswordUcenik').value = '';
+          
+          await loadUcenici();
+          await loadRoditelji();
+          showToast('Učenik i roditelj uspešno dodati!', 'success');
+        } else {
+          showToast(roditeljResult.error || 'Greška pri dodavanju roditelja', 'error');
+        }
+      } catch(err) {
+        showToast('Greška pri dodavanju', 'error');
+      }
+    }
+
+    async function editUcenik(id) {
+      const ucenik = uceniciLista.find(u => u.id == id);
+      if (!ucenik) return;
+      
+      document.getElementById('editUcenikId').value = ucenik.id;
+      document.getElementById('editUcenikIme').value = ucenik.ime;
+      document.getElementById('editUcenikPrezime').value = ucenik.prezime;
+      document.getElementById('editUcenikJmbg').value = ucenik.jmbg;
+      document.getElementById('editUcenikDatum').value = ucenik.datumRodjenja || '';
+      
+      const select = document.getElementById('editUcenikRazred');
+      select.innerHTML = '<option value="">Izaberite odeljenje</option>' + 
+        razrediLista.map(r => `<option value="${r.id}" ${ucenik.razredId == r.id ? 'selected' : ''}>${r.naziv}</option>`).join('');
+      
+      openModal('editUcenikModal');
+    }
+
+    async function updateUcenik() {
+      const id = document.getElementById('editUcenikId').value;
+      const data = {
+        ime: document.getElementById('editUcenikIme').value,
+        prezime: document.getElementById('editUcenikPrezime').value,
+        jmbg: document.getElementById('editUcenikJmbg').value,
+        datumRodjenja: document.getElementById('editUcenikDatum').value,
+        razredId: document.getElementById('editUcenikRazred').value || null
+      };
+      
+      try {
+        const res = await fetch(`${API_URL}/ucenici/${id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+        if (res.ok) {
+          closeModal('editUcenikModal');
+          await loadUcenici();
+          showToast('Učenik izmenjen', 'success');
+        } else {
+          const err = await res.json();
+          showToast(err.error || 'Greška', 'error');
+        }
+      } catch(err) {
+        showToast('Greška pri izmeni', 'error');
+      }
+    }
+
+    async function deleteUcenik(id) {
+      if (!confirm('Da li ste sigurni da želite da obrišete ovog učenika?')) return;
+      try {
+        const res = await fetch(`${API_URL}/ucenici/${id}`, { method: 'DELETE' });
+        if (res.ok) {
+          await loadUcenici();
+          await loadRoditelji();
+          showToast('Učenik obrisan', 'success');
+        }
+      } catch(err) {
+        showToast('Greška', 'error');
+      }
+    }
+
+    // ===== RASPORED =====
+    async function loadRaspored() {
+      try {
+        const res = await fetch(`${API_URL}/razred-predmeti/${skolaId}`);
+        const raspored = await res.json();
+        const tbody = document.getElementById('rasporedTable');
+        if (!raspored.length) {
+          tbody.innerHTML = '<tr><td colspan="4" class="text-center">Nema dodeljenih predmeta</td></tr>';
+          return;
+        }
+        tbody.innerHTML = raspored.map(r => `
+          <tr>
+            <td>${r.razredNaziv}</td>
+            <td>${r.predmetNaziv}</td>
+            <td>${r.nastavnikIme} ${r.nastavnikPrezime}</td>
+            <td>
+              <button class="btn-danger btn-sm" onclick="deleteRaspored('${r.id}')"><i class="ti ti-trash"></i></button>
+            </td>
+          </tr>
+        `).join('');
+      } catch(err) {
+        showToast('Greška pri učitavanju rasporeda', 'error');
+      }
+    }
+
+    async function loadRasporedSelects() {
+      const razredSelect = document.getElementById('rasporedRazred');
+      razredSelect.innerHTML = '<option value="">Izaberite odeljenje</option>' + 
+        razrediLista.map(r => `<option value="${r.id}">${r.naziv}</option>`).join('');
+      
+      const predmetSelect = document.getElementById('rasporedPredmet');
+      predmetSelect.innerHTML = '<option value="">Izaberite predmet</option>' + 
+        predmetiLista.map(p => `<option value="${p.id}">${p.naziv}</option>`).join('');
+      
+      const nastavnikSelect = document.getElementById('rasporedNastavnik');
+      nastavnikSelect.innerHTML = '<option value="">Izaberite nastavnika</option>' + 
+        nastavniciLista.map(n => `<option value="${n.id}">${n.ime} ${n.prezime}</option>`).join('');
+    }
+
+    async function saveRaspored() {
+      const data = {
+        razredId: document.getElementById('rasporedRazred').value,
+        predmetId: document.getElementById('rasporedPredmet').value,
+        nastavnikId: document.getElementById('rasporedNastavnik').value
+      };
+      if (!data.razredId || !data.predmetId || !data.nastavnikId) {
+        showToast('Izaberite odeljenje, predmet i nastavnika', 'error');
+        return;
+      }
+      try {
+        const res = await fetch(`${API_URL}/razred-predmeti`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+        const result = await res.json();
+        if (result.id) {
+          closeModal('rasporedModal');
+          await loadRaspored();
+          showToast('Predmet dodeljen odeljenju', 'success');
+        } else {
+          showToast(result.error || 'Greška', 'error');
+        }
+      } catch(err) {
+        showToast('Greška pri dodavanju', 'error');
+      }
+    }
+
+    async function deleteRaspored(id) {
+      if (!confirm('Da li ste sigurni da želite da obrišete ovu dodelu?')) return;
+      try {
+        const res = await fetch(`${API_URL}/razred-predmeti/${id}`, { method: 'DELETE' });
+        if (res.ok) {
+          await loadRaspored();
+          showToast('Dodela obrisana', 'success');
+        }
+      } catch(err) {
+        showToast('Greška', 'error');
+      }
+    }
+
+    // ===== RODITELJI =====
+    async function loadRoditelji() {
+      try {
+        const res = await fetch(`${API_URL}/roditelji/${skolaId}`);
+        const roditelji = await res.json();
+        const tbody = document.getElementById('roditeljiTable');
+        if (!roditelji.length) {
+          tbody.innerHTML = '<tr><td colspan="7" class="text-center">Nema roditelja</td></tr>';
+          return;
+        }
+        tbody.innerHTML = roditelji.map(r => {
+          const dete = uceniciLista.find(u => u.id == r.deteId);
+          return `
+            <tr>
+              <td>${r.ime}</td>
+              <td>${r.prezime}</td>
+              <td>${r.jmbg}</td>
+              <td><span class="badge badge-blue">${r.username}</span></td>
+              <td>${dete ? `${dete.ime} ${dete.prezime}` : '-'}</td>
+              <td>${r.email || '-'}</td>
+              <td>
+                <button class="btn-secondary btn-sm" onclick="changePasswordRoditelj('${r.id}')"><i class="ti ti-key"></i></button>
+                <button class="btn-danger btn-sm" onclick="deleteRoditelj('${r.id}')"><i class="ti ti-trash"></i></button>
+              </td>
+            </tr>
+          `;
+        }).join('');
+      } catch(err) {
+        showToast('Greška pri učitavanju roditelja', 'error');
+      }
+    }
+
+    async function loadRoditeljSelects() {
+      const select = document.getElementById('roditeljDete');
+      select.innerHTML = '<option value="">Izaberite dete</option>' + 
+        uceniciLista.map(u => `<option value="${u.id}">${u.ime} ${u.prezime} (${u.jmbg})</option>`).join('');
+    }
+
+    async function saveRoditelj() {
+      const data = {
+        skolaId,
+        ime: document.getElementById('roditeljIme').value,
+        prezime: document.getElementById('roditeljPrezime').value,
+        jmbg: document.getElementById('roditeljJmbg').value,
+        username: document.getElementById('roditeljUsername').value,
+        password: document.getElementById('roditeljPassword').value,
+        email: document.getElementById('roditeljEmail').value,
+        telefon: document.getElementById('roditeljTelefon').value,
+        deteId: document.getElementById('roditeljDete').value || null
+      };
+      
+      if (!data.ime || !data.prezime || !data.jmbg || !data.username || !data.password) {
+        showToast('Popunite sva obavezna polja', 'error');
+        return;
+      }
+      if (!/^\d{13}$/.test(data.jmbg)) {
+        showToast('JMBG mora imati 13 cifara', 'error');
+        return;
+      }
+      
+      try {
+        const res = await fetch(`${API_URL}/roditelji`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+        const result = await res.json();
+        if (result.id) {
+          closeModal('roditeljModal');
+          document.getElementById('roditeljIme').value = '';
+          document.getElementById('roditeljPrezime').value = '';
+          document.getElementById('roditeljJmbg').value = '';
+          document.getElementById('roditeljUsername').value = '';
+          document.getElementById('roditeljPassword').value = '';
+          document.getElementById('roditeljEmail').value = '';
+          document.getElementById('roditeljTelefon').value = '';
+          await loadRoditelji();
+          showToast('Roditelj dodat', 'success');
+        } else {
+          showToast(result.error || 'Greška', 'error');
+        }
+      } catch(err) {
+        showToast('Greška pri dodavanju', 'error');
+      }
+    }
+
+    async function changePasswordRoditelj(id) {
+      const novaLozinka = prompt('Unesite novu lozinku za roditelja (min 4 karaktera):');
+      if (!novaLozinka || novaLozinka.length < 4) {
+        showToast('Lozinka mora imati najmanje 4 karaktera', 'error');
+        return;
+      }
+      
+      try {
+        const res = await fetch(`${API_URL}/korisnici/${id}/password`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ password: novaLozinka })
+        });
+        if (res.ok) {
+          showToast('Lozinka promenjena', 'success');
+        }
+      } catch(err) {
+        showToast('Greška', 'error');
+      }
+    }
+
+    async function deleteRoditelj(id) {
+      if (!confirm('Da li ste sigurni da želite da obrišete ovog roditelja?')) return;
+      try {
+        const res = await fetch(`${API_URL}/roditelji/${id}`, { method: 'DELETE' });
+        if (res.ok) {
+          await loadRoditelji();
+          showToast('Roditelj obrisan', 'success');
+        }
+      } catch(err) {
+        showToast('Greška', 'error');
+      }
+    }
+
+    // ===== TOAST =====
+    function showToast(msg, type) {
+      const toast = document.createElement('div');
+      toast.className = `alert alert-${type}`;
+      toast.style.position = 'fixed';
+      toast.style.bottom = '20px';
+      toast.style.right = '20px';
+      toast.style.zIndex = '9999';
+      toast.style.maxWidth = '300px';
+      toast.innerHTML = msg;
+      document.body.appendChild(toast);
+      setTimeout(() => toast.remove(), 3000);
+    }
+  </script>
+</body>
+</html>

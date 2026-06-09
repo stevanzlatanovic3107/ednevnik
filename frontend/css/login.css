@@ -1,0 +1,201 @@
+/* ===== LOGIN STRANICA ===== */
+.login-body {
+  background: var(--navy);
+  display: flex;
+  align-items: stretch;
+  min-height: 100vh;
+}
+
+.login-wrapper {
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* ===== LEFT PANEL ===== */
+.login-left {
+  width: 480px;
+  flex-shrink: 0;
+  background: var(--bg-page);
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.brand {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+.brand-icon {
+  width: 44px;
+  height: 44px;
+  background: var(--navy);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 4px;
+}
+.brand-icon i {
+  font-size: 22px;
+  color: var(--accent);
+}
+.brand-name {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--navy);
+  letter-spacing: -0.01em;
+}
+.brand-sub {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+.login-card {
+  background: var(--bg-surface);
+  border-radius: var(--radius-xl);
+  padding: 32px;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border);
+}
+.login-card h1 {
+  font-size: 1.4rem;
+  color: var(--navy);
+  margin-bottom: 4px;
+}
+.login-desc {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  margin-bottom: 24px;
+}
+
+/* Password toggle */
+.toggle-pw {
+  position: absolute;
+  right: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-light);
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  transition: color 0.15s;
+}
+.toggle-pw:hover {
+  color: var(--text-main);
+}
+
+/* Demo accounts */
+.demo-accounts {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+.demo-title {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+}
+.demo-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.demo-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: var(--bg-surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-align: left;
+}
+.demo-btn:hover {
+  background: var(--blue-soft);
+  color: var(--blue-dark);
+  border-color: rgba(13, 64, 112, 0.2);
+}
+.demo-btn i {
+  font-size: 14px;
+}
+
+/* ===== RIGHT PANEL ===== */
+.login-right {
+  flex: 1;
+  background: var(--navy);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px;
+  position: relative;
+  overflow: hidden;
+}
+.login-right::before {
+  content: '';
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(232, 160, 32, 0.08) 0%, transparent 70%);
+  top: -100px;
+  right: -100px;
+  pointer-events: none;
+}
+
+.features {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  max-width: 320px;
+}
+.feature-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.95rem;
+}
+.feature-item i {
+  font-size: 24px;
+  color: var(--accent);
+  flex-shrink: 0;
+  width: 24px;
+}
+
+/* ===== LOADING ===== */
+.btn-primary.loading {
+  opacity: 0.75;
+  pointer-events: none;
+}
+.btn-primary.loading span::after {
+  content: '...';
+  animation: dots 1s infinite;
+}
+@keyframes dots {
+  0%, 100% { content: '.'; }
+  33% { content: '..'; }
+  66% { content: '...'; }
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .login-right {
+    display: none;
+  }
+  .login-left {
+    width: 100%;
+  }
+}

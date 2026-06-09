@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Roditeljski panel - eDnevnik</title>
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+  <style>
+    .ocena-badge {
+      display: inline-block;
+      width: 36px;
+      height: 36px;
+      line-height: 36px;
+      text-align: center;
+      border-radius: 10px;
+      font-weight: bold;
+      margin: 3px;
+      font-size: 1rem;
+    }
+    .ocena-5 { background: var(--green-soft); color: var(--green); }
+    .ocena-4 { background: var(--blue-soft); color: var(--blue-dark); }
+    .ocena-3 { background: var(--accent-soft); color: var(--accent-dark); }
+    .ocena-2 { background: var(--red-soft); color: var(--red); }
+    .ocena-1 { background: #3a0000; color: #ff6b6b; }
+    .prosek-big {
+      font-size: 3rem;
+      font-weight: bold;
+      color: var(--navy);
+    }
+    .info-card {
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 100%);
+      color: white;
+      border-radius: var(--radius-lg);
+      padding: 24px;
+    }
+    .predmet-card {
+      background: var(--bg-surface2);
+      border-radius: var(--radius-md);
+      padding: 12px;
+      text-align: center;
+      min-width: 100px;
+    }
+    .predmet-card .prosek {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: var(--navy);
+    }
+    .tab-content {
+      display: none;
+    }
+    .tab-content.active {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-body">
+    <div class="sidebar">
+      <div class="sidebar-logo">
+        <h2><i class="ti ti-users"></i> eDnevnik</h2>
+        <p>Roditeljski panel</p>
+      </div>
+      <div class="sidebar-nav">
+        <div class="nav-item active" onclick="showTab('pregled')">
+          <i class="ti ti-eye"></i> <span>Pregled deteta</span>
+        </div>
+        <div class="nav-item" onclick="showTab('ocene')">
+          <i class="ti ti-clipboard-list"></i> <span>Sve ocene</span>
+        </div>
+        <div class="nav-item" onclick="showTab('izostanci')">
+          <i class="ti ti-calendar-off"></i> <span>Izostanci</span>
+        </div>
+      </div>
+      <div class="sidebar-footer">
+        <div class="user-info">
+          <div class="user-avatar" id="userAvatar">R</div>
+          <div>
+            <div id="userName">Roditelj</div>
+            <small id="userRole">Roditelj</small>
+          </div>
+        </div>
+        <button class="logout-btn" onclick="logout()">
+          <i class="ti ti-logout"></i> Odjava
+        </button>
+      </div>
+    </div>
+
+    <div class="main-content">
+      <div class="topbar">
+        <h1 id="pageTitle">Pregled deteta</h1>
+      </div>
+      <div class="page-content">
+        
+        <!-- TAB: Pregled -->
+        <div id="pregledTab" class="tab-content active">
+          <div class="info-card mb-24">
+            <div class="d-flex align-center gap-16">
+              <i class="ti ti-user" style="font-size: 48px;"></i>
+              <div>
+                <div id="deteImePrezime" style="font-size: 1.5rem; font-weight: bold;">Učitavanje...</div>
+                <div id="deteOdeljenje" style="opacity: 0.8;">Odeljenje: —</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="stats-grid">
+            <div class="stat-card text-center">
+              <div class="stat-label">Ukupan prosek</div>
+              <div class="prosek-big" id="ukupanProsek">—</div>
+            </div>
+            <div class="stat-card text-center">
+              <div class="stat-label">Broj ocena</div>
+              <div class="stat-value" id="brojOcena">—</div>
+            </div>
+            <div class="stat-card text-center">
+              <div class="stat-label">Ukupno izostanaka</div>
+              <div class="stat-value" id="brojIzostanaka">—</div>
+            </div>
+            <div class="stat-card text-center">
+              <div class="stat-label">Opravdani izostanci</div>
+              <div class="stat-value" id="brojOpravdanih">—</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3>Proseci po predmetima</h3>
+            </div>
+            <div id="proseciPoPredmetima" class="d-flex gap-8 flex-wrap"></div>
+          </div>
+        </div>
+
+        <!-- TAB: Sve ocene -->
+        <div id="oceneTab" class="tab-content">
+          <div class="card">
+            <div class="card-header">
+              <h3>Sve ocene deteta</h3>
+            </div>
+            <div class="table-wrap">
+              <table class="data-table w-100">
+                <thead>
+                  <tr><th>Predmet</th><th>Ocena</th><th>Datum</th><th>Nastavnik</th><th>Napomena</th>
+                </thead>
+                <tbody id="sveOceneLista"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB: Izostanci -->
+        <div id="izostanciTab" class="tab-content">
+          <div class="card">
+            <div class="card-header">
+              <h3>Svi izostanci deteta</h3>
+            </div>
+            <div class="table-wrap">
+              <table class="data-table w-100">
+                <thead>
+                  <tr><th>Predmet</th><th>Datum</th><th>Čas</th><th>Status</th><th>Napomena</th>
+                </thead>
+                <tbody id="sviIzostanciLista"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API_URL = 'http://localhost:3000/api';
+    let user = null;
+    let skolaId = null;
+    let deteId = null;
+    let detePodaci = null;
+    let sveOcene = [];
+    let sviIzostanci = [];
+    let sviPredmeti = [];
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      const userStr = localStorage.getItem('user');
+      if (!userStr) {
+        window.location.href = 'login.html';
+        return;
+      }
+      user = JSON.parse(userStr);
+      skolaId = user.skolaId;
+      deteId = user.deteId;
+      
+      document.getElementById('userName').innerText = `${user.ime} ${user.prezime}`;
+      document.getElementById('userAvatar').innerText = (user.ime[0] + user.prezime[0]).toUpperCase();
+      
+      await loadPodaci();
+    });
+
+    async function loadPodaci() {
+      try {
+        // Učitaj učenike i pronađi dete
+        const resUcenici = await fetch(`${API_URL}/ucenici/${skolaId}`);
+        const ucenici = await resUcenici.json();
+        detePodaci = ucenici.find(u => u.id == deteId);
+        
+        if (detePodaci) {
+          const resRazredi = await fetch(`${API_URL}/razredi/${skolaId}`);
+          const razredi = await resRazredi.json();
+          const razred = razredi.find(r => r.id == detePodaci.razredId);
+          detePodaci.razredNaziv = razred ? razred.naziv : '—';
+        }
+        
+        // Učitaj ocene
+        const resOcene = await fetch(`${API_URL}/ocene/ucenik/${deteId}`);
+        sveOcene = await resOcene.json();
+        
+        // Učitaj izostanke
+        const resIzostanci = await fetch(`${API_URL}/izostanci/ucenik/${deteId}`);
+        sviIzostanci = await resIzostanci.json();
+        
+        // Učitaj predmete
+        const resPredmeti = await fetch(`${API_URL}/predmeti/${skolaId}`);
+        sviPredmeti = await resPredmeti.json();
+        
+        renderPregled();
+        renderOcene();
+        renderIzostanke();
+        
+      } catch(err) {
+        showToast('Greška pri učitavanju podataka', 'error');
+        console.error(err);
+      }
+    }
+
+    function renderPregled() {
+      if (!detePodaci) {
+        document.getElementById('deteImePrezime').innerHTML = 'Nije pronađeno dete';
+        return;
+      }
+      
+      document.getElementById('deteImePrezime').innerHTML = `
+        ${detePodaci.ime} ${detePodaci.prezime}
+        <small style="font-size:0.8rem; opacity:0.7;"> (JMBG: ${detePodaci.jmbg})</small>
+      `;
+      document.getElementById('deteOdeljenje').innerHTML = `
+        <i class="ti ti-school"></i> Odeljenje: ${detePodaci.razredNaziv}
+        ${detePodaci.datumRodjenja ? `| 🎂 ${formatDatum(detePodaci.datumRodjenja)}` : ''}
+      `;
+      
+      const ukupanProsek = izracunajUkupanProsek();
+      const brojOcena = sveOcene.length;
+      const brojIzostanaka = sviIzostanci.length;
+      const brojOpravdanih = sviIzostanci.filter(i => i.opravdan == 1).length;
+      
+      document.getElementById('ukupanProsek').innerHTML = ukupanProsek ? ukupanProsek.toFixed(2) : '—';
+      document.getElementById('brojOcena').innerHTML = brojOcena;
+      document.getElementById('brojIzostanaka').innerHTML = brojIzostanaka;
+      document.getElementById('brojOpravdanih').innerHTML = brojOpravdanih;
+      
+      renderProseciPoPredmetima();
+    }
+
+    function izracunajUkupanProsek() {
+      if (!sveOcene.length) return null;
+      const suma = sveOcene.reduce((acc, o) => acc + o.vrednost, 0);
+      return suma / sveOcene.length;
+    }
+
+    function renderProseciPoPredmetima() {
+      const container = document.getElementById('proseciPoPredmetima');
+      
+      const predmetOcene = {};
+      sveOcene.forEach(ocena => {
+        if (!predmetOcene[ocena.predmetId]) {
+          predmetOcene[ocena.predmetId] = [];
+        }
+        predmetOcene[ocena.predmetId].push(ocena.vrednost);
+      });
+      
+      if (Object.keys(predmetOcene).length === 0) {
+        container.innerHTML = '<div class="text-muted">Nema evidentiranih ocena</div>';
+        return;
+      }
+      
+      const proseci = [];
+      for (const [predmetId, ocene] of Object.entries(predmetOcene)) {
+        const predmet = sviPredmeti.find(p => p.id == predmetId);
+        const prosek = ocene.reduce((a, b) => a + b, 0) / ocene.length;
+        proseci.push({
+          naziv: predmet ? predmet.naziv : 'Nepoznat',
+          prosek: prosek,
+          brojOcena: ocene.length
+        });
+      }
+      
+      proseci.sort((a, b) => b.prosek - a.prosek);
+      
+      container.innerHTML = proseci.map(p => `
+        <div class="predmet-card">
+          <div class="prosek">${p.prosek.toFixed(2)}</div>
+          <div class="stat-label">${p.naziv}</div>
+          <small class="text-muted">${p.brojOcena} ocena</small>
+        </div>
+      `).join('');
+    }
+
+    function renderOcene() {
+      const tbody = document.getElementById('sveOceneLista');
+      if (!sveOcene.length) {
+        tbody.innerHTML = '<table><td colspan="5" class="text-center">Nema evidentiranih ocena</td></tr>';
+        return;
+      }
+      
+      const sortedOcene = [...sveOcene].sort((a, b) => new Date(b.datum) - new Date(a.datum));
+      
+      tbody.innerHTML = sortedOcene.map(o => {
+        const predmet = sviPredmeti.find(p => p.id == o.predmetId);
+        const ocenaKlasa = `ocena-${o.vrednost}`;
+        return `
+          <tr>
+            <td>${predmet ? predmet.naziv : '—'}</td>
+            <td><span class="ocena-badge ${ocenaKlasa}">${o.vrednost}</span></td>
+            <td>${formatDatum(o.datum)}</td>
+            <td>${o.nastavnikId ? 'Nastavnik' : '—'}</td>
+            <td>${o.napomena || '—'}</td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function renderIzostanke() {
+      const tbody = document.getElementById('sviIzostanciLista');
+      if (!sviIzostanci.length) {
+        tbody.innerHTML = '<tr><td colspan="5" class="text-center">Nema evidentiranih izostanaka</td></tr>';
+        return;
+      }
+      
+      const sortedIzostanci = [...sviIzostanci].sort((a, b) => new Date(b.datum) - new Date(a.datum));
+      
+      tbody.innerHTML = sortedIzostanci.map(i => {
+        const predmet = sviPredmeti.find(p => p.id == i.predmetId);
+        return `
+          <tr>
+            <td>${predmet ? predmet.naziv : '—'}</td>
+            <td>${formatDatum(i.datum)}</td>
+            <td>${i.cas}. čas</td>
+            <td><span class="badge ${i.opravdan ? 'badge-green' : 'badge-red'}">${i.opravdan ? 'Opravdan' : 'Neopravdan'}</span></td>
+            <td>${i.napomena || '—'}</td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function showTab(tabName) {
+      document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+      event.target.closest('.nav-item').classList.add('active');
+      
+      document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+      document.getElementById(`${tabName}Tab`).classList.add('active');
+      
+      const titles = { pregled: 'Pregled deteta', ocene: 'Sve ocene', izostanci: 'Izostanci' };
+      document.getElementById('pageTitle').innerText = titles[tabName];
+    }
+
+    function formatDatum(iso) {
+      if (!iso) return '—';
+      const d = new Date(iso);
+      return d.toLocaleDateString('sr-RS', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    }
+
+    function logout() {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      window.location.href = 'index.html';
+    }
+
+    function showToast(msg, type) {
+      const toast = document.createElement('div');
+      toast.className = `alert alert-${type}`;
+      toast.style.position = 'fixed';
+      toast.style.bottom = '20px';
+      toast.style.right = '20px';
+      toast.style.zIndex = '9999';
+      toast.style.maxWidth = '300px';
+      toast.innerHTML = msg;
+      document.body.appendChild(toast);
+      setTimeout(() => toast.remove(), 3000);
+    }
+  </script>
+</body>
+</html>
